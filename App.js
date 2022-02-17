@@ -8,10 +8,11 @@ import Home from './Home.js';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import { enableExpoCliLogging } from 'expo/build/logs/Logs';
+import Login from './Login.js';
 
 // import Icons from "./Icons";
 const Tab = createMaterialBottomTabNavigator();
-
 export default function App() {
   return (
     <NavigationContainer>
@@ -50,14 +51,19 @@ export default function App() {
             ),
           }}
         />
+        <Tab.Screen
+          name='Login'
+          component={Login}
+          options={{
+            tabBarLabel: 'Login',
+            tabBarIcon: ({ color }) => (
+              <FontAwesome name='gear' color={color} size={26} />
+            ),
+          }}
+        />
       </Tab.Navigator>
     </NavigationContainer>
   );
-
-
 }
-
-
 const styles = StyleSheet.create({
-  
 });
