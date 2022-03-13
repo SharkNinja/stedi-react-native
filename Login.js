@@ -1,85 +1,44 @@
 import React from 'react';
 import {StyleSheet, View, Text, Button} from 'react-native';
-
+import { TextInput } from 'react-native-paper';
 export default function Login(props){
     return(
-        <View style={styles.login}>
-            <Text>This is the Login Screen</Text>
+        <View>
+            <Text> </Text>
+            <Text> </Text>
+            <Text> </Text>
+            <Text> </Text>
+            <TextInput placeholder='Phone Number'></TextInput>
+            <Text> </Text>
+            <TextInput placeholder='Password'></TextInput>
+            <Text> </Text>
+            <Text> </Text>
+            <Button title="Get OTP" onPress={()=>props.setUserLoggedIn(true)}></Button>
             <Button title="Log In" onPress={()=>props.setUserLoggedIn(true)}></Button>
-        </View>
 
+        </View>
     );
 }
 
-const styles = StyleSheet.create({
-    login: {
-        flexDirection: 'row',
-        width: '100%',
-        justifyContent: 'space-between',
-        backgroundColor: 'green',
-        height: '12%',
-        alignItems: 'flex-end',
-        paddingBottom: 5,
-        paddingLeft: 10,
-        paddingRight: 10,
-        
-      },
-})
+fetch('https://dev.stedi.me/twofactorlogin/', {
+  method: 'POST',
+  headers: {
+    Accept: 'application/json',
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify({
+    firstParam: 'yourValue',
+    secondParam: 'yourOtherValue'
+  })
+});
 
-function savetoken(token){
-    // whatever passes as token should save into local storage
-        if (window.localStorage){
-         localStorage.setItem("token", token);
-        }
-    }
-
-    function checkexpiredtoken(){
-        // read token from local storage - check with ajax call
-            if(window.localStorage){
-            usertoken = localStorage.getItem("token", token);
-            $.ajax({
-               type: 'GET',
-                url: '/checkToken',
-                data: '{"usertoken":"' + usertoken + '"}',
-                success: function(data){savetoken(data)},
-                contentType: "application/text",
-                dataType: 'text' })
-            }
-        }
-        
-        function userlogin(){
-            setuserpassword();
-            setusername();
-            $.ajax({
-                type: 'POST',
-                url: '/login',
-                data: ' {"userName":"'+ phoneNumber +'", "password":"'+ password +'"}', // or JSON.stringify ({name: 'jonas'}),
-                success: function(data) {
-                    savetoken(data);
-                    localStorage.removeItem("customer");
-                    window.location.href = "/timer.html";
-                 },
-                contentType: "application/text",
-                dataType: 'text'
-            });
-        
-        }
-        
-        function setusername(){
-            userName = $("#un").val();
-        }
-        
-        function setuserpassword(){
-            password = $("#pw").val();
-        }
-        
-        var enterFunction = (event) =>{
-            if (event.keyCode === 13){
-                event.preventDefault();
-                $("#loginbtn").click();
-            }
-        }
-        
-        var passwordField = document.getElementById("pw");
-        
-        passwordField.addEventListener("keyup", enterFunction);
+const getTwoFactorFromApi = () => {
+  return fetch('https://dev.stedi.me/twofactorlogin/')
+    .then((response) => response.text())
+    .then((json) => {
+      return json.movies;
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+};
