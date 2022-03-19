@@ -29,7 +29,7 @@ export default function App() {
       >
         <Tab.Screen
           name='Home'
-          component={Home}
+          children={()=><Home setUserEmail={setUserEmail} />}
           options={{
             tabBarLabel: 'Home',
             tabBarIcon: ({ color }) => (
@@ -70,4 +70,3 @@ else {
 const styles = StyleSheet.create({
   
 });
-
