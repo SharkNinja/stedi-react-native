@@ -1,6 +1,5 @@
 import React ,{useState}from 'react';
-import {StyleSheet, View, Text, Button} from 'react-native';
-import { TextInput } from 'react-native-paper';
+import {StyleSheet, View, Text, Button, TextInput} from 'react-native';
 export default function Login(props){
   const [phoneNumber, setPhoneNumber] = useState("");
   const [oneTimePassword, setOneTimePassword] = useState("")
@@ -30,12 +29,14 @@ export default function Login(props){
             <Button title="Get OTP" onPress={()=>sendOTP(phoneNumber)}></Button>
             <Text> </Text>
             <Text> </Text>
-            <Button title="Verify OTP" onPress={()=>props.setUserLoggedIn(true)}></Button>
+            <Button title="Verify OTP" onPress={()=>{verifyOTP(oneTimePassword,phoneNumber,props)
+            }
+              }></Button>
         </View>
     );
 }
-const sendOTP = (phoneNumber) => {
-  fetch('https://dev.stedi.me/twofactorlogin/'+ phoneNumber, {
+const sendOTP = async (phoneNumber) => {
+  await fetch('https://dev.stedi.me/twofactorlogin/'+ phoneNumber, {
   method: 'POST',
   headers: {
     Accept: 'application/text',
@@ -43,12 +44,39 @@ const sendOTP = (phoneNumber) => {
   },
 });
 }
+//token 70ecec20-81d7-4e46-a4bc-8fbd01a0a403
+const verifyOTP = async (oneTimePassword,phoneNumber,props) => {
+  const tokenResponse = await fetch('https://dev.stedi.me/twofactorlogin', {
+    method: 'POST',
+    headers: {
+      Accept: 'application/text',
+      'Content-Type': 'application/text',
+    },
+    body: JSON.stringify({
+      phoneNumber: phoneNumber,
+      oneTimePassword: oneTimePassword,
+    })
+  },
+  );
+  const token = await tokenResponse.text();
+  console.log(token);
+  const emailResponse = await fetch('https://dev.stedi.me/validate/'+ token, {
+    method: 'GET',
+    headers: {
+      Accept: 'application/text',
+      'Content-Type': 'application/text',
+    },
+  });
+  const email = await emailResponse.text();
+props.setUserEmail(email);
+props.setUserLoggedIn(true);
+}
 const styles = StyleSheet.create({
   login: {
       flexDirection: 'row',
       width: '100%',
       justifyContent: 'space-between',
-      backgroundColor: 'pink',
+      backgroundColor: 'green',
       height: '12%',
       alignItems: 'flex-end',
       paddingBottom: 5,
